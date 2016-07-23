@@ -4,7 +4,9 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+    android:background="@drawable/order_item_design"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:padding="10dp">
 
 
     <me.himanshusoni.quantityview.QuantityView
@@ -12,17 +14,23 @@
         android:id="@+id/quantityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:qv_minQuantity="0"
         app:qv_quantity="1"
+        app:qv_quantityTextColor="@android:color/holo_blue_bright"
+        app:qv_addButtonTextColor="@android:color/holo_green_light"
+        app:qv_removeButtonTextColor="@android:color/holo_red_light"
         android:layout_gravity="center"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/md_listitem_textsize"
         android:id="@+id/item_name"
         android:padding="10dp"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_gravity="center"
+        android:gravity="center"
         android:layout_weight="1"/>
 </LinearLayout>

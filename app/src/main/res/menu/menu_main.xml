@@ -5,8 +5,8 @@
     <item
         android:id="@+id/default_order"
         android:orderInCategory="200"
-        android:title="@string/action_settings"
-        app:showAsAction="never|withText"/>
+        android:title="@string/default_order"
+        app:showAsAction="withText|ifRoom"/>
     <item
         android:id="@+id/action_signout"
         android:orderInCategory="0"
