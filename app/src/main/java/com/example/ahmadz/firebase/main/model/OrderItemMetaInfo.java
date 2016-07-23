@@ -10,8 +10,12 @@ public class OrderItemMetaInfo {
 	public OrderItemMetaInfo(){}
 
 	public OrderItemMetaInfo(String name) {
+		this(name, 1);
+	}
+
+	public OrderItemMetaInfo(String name, int quantity) {
 		this.name = name;
-		quantity = 1;
+		this.quantity = quantity;
 	}
 
 	public String getName() {

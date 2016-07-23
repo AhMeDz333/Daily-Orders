@@ -52,7 +52,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".main.activity.NewOrderActivity"
+            android:name=".main.activity.DefaultOrderActivity"
             android:label="@string/title_activity_new_order"
             android:parentActivityName=".main.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
