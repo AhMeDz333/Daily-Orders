@@ -44,24 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		ButterKnife.bind(this);
-
-//		try {
-//			PackageInfo info = getPackageManager().getPackageInfo(
-//					getPackageName(),
-//					PackageManager.GET_SIGNATURES);
-//			for (Signature signature : info.signatures) {
-//				MessageDigest md = MessageDigest.getInstance("SHA");
-//				md.update(signature.toByteArray());
-//				Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//			}
-//		}
-//		catch (PackageManager.NameNotFoundException e) {
-//
-//		}
-//		catch (NoSuchAlgorithmException e) {
-//
-//		}
-
 		mAuth = FirebaseAuth.getInstance();
 
 		if (mAuth.getCurrentUser() != null) {
@@ -120,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
 		Log.i(TAG, "handleFacebookAccessToken:" + token);
 
 		AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-
 		mAuth.signInWithCredential(credential)
 				.addOnCompleteListener(this, onCompletionListener);
 	}

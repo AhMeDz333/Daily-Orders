@@ -5,7 +5,6 @@ package com.example.ahmadz.firebase.main.model;
  */
 public class OrderItemMetaInfo {
 	String name;
-	String comment;
 	int quantity;
 
 	public OrderItemMetaInfo(){}
@@ -29,13 +28,5 @@ public class OrderItemMetaInfo {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 }

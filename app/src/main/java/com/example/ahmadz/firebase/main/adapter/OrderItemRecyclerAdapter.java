@@ -30,7 +30,7 @@ public class OrderItemRecyclerAdapter extends FirebaseRecyclerAdapter<OrderItemM
 		viewHolder.quantityView.setOnQuantityChangeListener(new QuantityView.OnQuantityChangeListener() {
 			@Override
 			public void onQuantityChanged(int newQuantity, boolean programmatically) {
-				if (programmatically)
+				if (!programmatically)
 					listener.onQuantityChanged(position, newQuantity);
 			}
 			@Override

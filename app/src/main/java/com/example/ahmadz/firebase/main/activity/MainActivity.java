@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 
 	public void signMeOut(){
 		mAuth.signOut();
+		// TODO: 7/23/16 logout from facebook
 	}
 
 	@Override
