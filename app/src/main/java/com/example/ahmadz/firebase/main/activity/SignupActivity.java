@@ -1,4 +1,4 @@
-package com.example.ahmadz.firebase;
+package com.example.ahmadz.firebase.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.ahmadz.firebase.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.Bind;

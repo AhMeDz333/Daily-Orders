@@ -4,7 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
-                                                 tools:context=".LoginActivity">
+                                                 tools:context=".main.activity.LoginActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -73,16 +73,16 @@
 
         <!-- Link to Login Screen -->
 
-        <Button
-            android:id="@+id/sign_up_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
-            android:background="@null"
-            android:text="@string/btn_link_to_register"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
+        <!--<Button-->
+            <!--android:id="@+id/sign_up_button"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="20dip"-->
+            <!--android:background="@null"-->
+            <!--android:text="@string/btn_link_to_register"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="15dp" />-->
     </LinearLayout>
 
     <ProgressBar
