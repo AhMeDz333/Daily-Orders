@@ -36,15 +36,18 @@
     <string name="action_logout">Logout</string>
     <string name="hint_nickname">Nickname</string>
     <string name="main_activity_label">Daily Orders</string>
-    <string name="no_orders">No Orders yet!\nClick on the floating button below\nto add items!</string>
+    <!--<string name="no_orders">No Orders yet!\nClick on the floating button below\nto add items!</string>-->
+    <string name="no_orders">No Orders yet!</string>
     <string name="title_activity_new_order">NewOrderActivity</string>
     <string name="uid">uid</string>
-    <string name="order_defaults">defaults</string>
+    <string name="defaults">defaults</string>
     <string name="no_items">No Items Yet!</string>
     <string name="main_title">Today\'s Orders</string>
     <string name="items_title">You Order Items</string>
     <string name="quantity">quantity</string>
-    <string name="default_order">Default Order</string>
+    <string name="default_order">My Default Order</string>
     <string name="clear_all">Clear All</string>
     <string name="orders_node">orders</string>
+    <string name="add_item">Add Item</string>
+    <string name="order_my_defaults">Order My Defaults</string>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/order_item_design"
-    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:layout_margin="5dp"
     android:padding="10dp">
 
 
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         app:qv_minQuantity="0"
         app:qv_quantity="1"
-        app:qv_quantityTextColor="@android:color/holo_blue_bright"
+        app:qv_quantityTextColor="@android:color/holo_orange_dark"
         app:qv_addButtonTextColor="@android:color/holo_green_light"
         app:qv_removeButtonTextColor="@android:color/holo_red_light"
         android:layout_gravity="center"/>

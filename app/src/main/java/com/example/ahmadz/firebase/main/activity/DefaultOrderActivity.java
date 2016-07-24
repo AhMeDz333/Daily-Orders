@@ -19,6 +19,7 @@ import com.example.ahmadz.firebase.main.callback.OrderItemChangedListener;
 import com.example.ahmadz.firebase.main.database.FireBaseHelper;
 import com.example.ahmadz.firebase.main.model.OrderItemMetaInfo;
 import com.example.ahmadz.firebase.main.model.OrderItemViewHolder;
+import com.example.ahmadz.firebase.main.utils.DialogHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DefaultOrderActivity extends AppCompatActivity implements OrderItemChangedListener {
 
@@ -41,6 +43,7 @@ public class DefaultOrderActivity extends AppCompatActivity implements OrderItem
 	private DatabaseReference mDatabase;
 	private OrderItemRecyclerAdapter mAdapter;
 	private String userUID;
+	private DialogHelper dialogHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class DefaultOrderActivity extends AppCompatActivity implements OrderItem
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mContext = this;
+		dialogHelper = new DialogHelper(mContext);
 
 		setExtras();
 		initRecyclerView();
@@ -69,14 +73,14 @@ public class DefaultOrderActivity extends AppCompatActivity implements OrderItem
 				OrderItemMetaInfo.class,
 				R.layout.order_item_layout,
 				OrderItemViewHolder.class,
-				mDatabase.child(getString(R.string.default_order))
+				mDatabase.child(getString(R.string.defaults))
 						.child(getString(R.string.orders_node))
 						.child(userUID)
 		);
 		recyclerOrders.setAdapter(mAdapter);
 
 		// for data tracking.
-		mDatabase.child(getString(R.string.default_order))
+		mDatabase.child(getString(R.string.defaults))
 				.child(getString(R.string.orders_node))
 				.child(userUID)
 				.addValueEventListener(new ValueEventListener() {
@@ -91,7 +95,7 @@ public class DefaultOrderActivity extends AppCompatActivity implements OrderItem
 					}
 					@Override
 					public void onCancelled(DatabaseError databaseError) {
-
+						progressBar.setVisibility(View.INVISIBLE);
 					}
 				});
 	}
@@ -101,10 +105,28 @@ public class DefaultOrderActivity extends AppCompatActivity implements OrderItem
 		userUID = intent.getStringExtra(getString(R.string.uid));
 	}
 
+	@OnClick(R.id.fab)
+	public void addItemFabClicked(){
+		dialogHelper.showInputDialog(
+				input -> addNewItem(new OrderItemMetaInfo(input)),
+				"Add Order Item!",
+				"Order Item Name..."
+		);
+	}
+
+	private void addNewItem(OrderItemMetaInfo orderItemMetaInfo) {
+		mDatabase.child(getString(R.string.defaults))
+				.child(getString(R.string.orders_node))
+				.child(userUID)
+				.push().setValue(orderItemMetaInfo);
+	}
+
 	private void clearAll() {
-		mDatabase.child(getString(R.string.default_order))
+		mDatabase.child(getString(R.string.defaults))
 				.child(getString(R.string.orders_node))
 				.child(userUID).removeValue();
+
+		dialogHelper.showMessageDialog("Clear All", "All Clear Commander!");
 	}
 
 	@Override

@@ -7,23 +7,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.ahmadz.firebase.R;
 import com.example.ahmadz.firebase.main.adapter.OrderItemRecyclerAdapter;
+import com.example.ahmadz.firebase.main.callback.HidingScrollListener;
 import com.example.ahmadz.firebase.main.callback.OrderItemChangedListener;
 import com.example.ahmadz.firebase.main.database.FireBaseHelper;
 import com.example.ahmadz.firebase.main.model.OrderItemMetaInfo;
 import com.example.ahmadz.firebase.main.model.OrderItemViewHolder;
+import com.example.ahmadz.firebase.main.utils.DialogHelper;
 import com.facebook.FacebookSdk;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 	@Bind(R.id.recyclerView_orders) RecyclerView recyclerOrders;
 	@Bind(R.id.empty_message) TextView emptyMessage;
 	@Bind(R.id.progress_bar) ProgressBar progressBar;
+	@Bind(R.id.float_menu)
+	FloatingActionMenu floatMenu;
 
 	private final String TAG = this.getClass().getSimpleName();
 	private String TODAY;
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 	private DatabaseReference mDatabase;
 	private OrderItemRecyclerAdapter mAdapter;
 	private String userUID;
+	private DialogHelper dialogHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +67,20 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 		setSupportActionBar(toolbar);
+//		getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
 		mContext = this;
 		TODAY = getDate();
+		dialogHelper = new DialogHelper(mContext);
 		//initialize Facebook SDK.
 		FacebookSdk.sdkInitialize(getApplicationContext());
-
 		setupAuthentication();
 
-		if(mAuth.getCurrentUser() != null) {//if signed in.
-			setupRecyclerViewSync();
-		}
+		if(mAuth.getCurrentUser() == null) //if not signed in don't go further.
+			return;
+
+		initFabMenu();
+		setupRecyclerViewSync();
 	}
 
 	private String getDate() {
@@ -85,22 +95,52 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 	}
 
 	@OnClick(R.id.fab)
-	public void fabClicked(){
-		new MaterialDialog.Builder(mContext)
-				.title("Add Order Item!")
-				.titleGravity(GravityEnum.CENTER)
-				.titleColor(getResources().getColor(R.color.colorPrimaryDark))
-				.inputType(InputType.TYPE_CLASS_TEXT)
-				.input("Order Item Name...", "", (dialog, input) -> {
-					String itemName = input.toString();
-					addNewItem(itemName, 1);
-				})
-				.show();
+	public void addItemFabClicked(){
+		floatMenu.close(true);
+		dialogHelper.showInputDialog(
+				input -> addNewItem(new OrderItemMetaInfo(input)),
+				"Add Order Item!",
+				"Order Item Name..."
+		);
 	}
 
-	private void addNewItem(String itemName, int quantity) {
-		OrderItemMetaInfo orderItemMetaInfo = new OrderItemMetaInfo(itemName, quantity);
-		mDatabase.child(TODAY).child(getString(R.string.orders_node)).push().setValue(orderItemMetaInfo);
+	private void addNewItem(OrderItemMetaInfo orderItemMetaInfo) {
+		mDatabase.
+				child(TODAY).
+				child(getString(R.string.orders_node))
+				.push().setValue(orderItemMetaInfo);
+	}
+
+	@OnClick(R.id.fab_order_default)
+	public void orderDefaultFabClicked(){
+		floatMenu.close(true);
+		progressBar.setVisibility(View.VISIBLE);
+
+		mDatabase
+				.child(getString(R.string.defaults))
+				.child(getString(R.string.orders_node))
+				.child(userUID)
+				.addListenerForSingleValueEvent(new ValueEventListener() {
+					@Override
+					public void onDataChange(DataSnapshot dataSnapshot) {
+						progressBar.setVisibility(View.INVISIBLE);
+
+						if (dataSnapshot == null || dataSnapshot.getChildrenCount() == 0){
+							dialogHelper.showMessageDialog("Empty Defaults", "No default items were found!");
+							return;
+						}
+
+						for (DataSnapshot child : dataSnapshot.getChildren()) {
+							addNewItem(child.getValue(OrderItemMetaInfo.class));
+						}
+
+						dialogHelper.showMessageDialog("Success", "Items were added successfully.");
+					}
+					@Override
+					public void onCancelled(DatabaseError databaseError) {
+						progressBar.setVisibility(View.INVISIBLE);
+					}
+				});
 	}
 
 	private void startDefaultOrderActivity() {
@@ -142,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 					}
 					@Override
 					public void onCancelled(DatabaseError databaseError) {
-
+						progressBar.setVisibility(View.INVISIBLE);
 					}
 				});
 	}
@@ -171,14 +211,31 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 		mAdapter.getRef(position).updateChildren(map);
 	}
 
+	private void initFabMenu(){
+		floatMenu.setClosedOnTouchOutside(true);
+		recyclerOrders.setOnScrollListener(new HidingScrollListener() {
+			@Override
+			public void onHide() {
+				FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) floatMenu.getLayoutParams();
+				int fabBottomMargin = lp.bottomMargin;
+				floatMenu.animate().translationY(floatMenu.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+			}
+
+			@Override
+			public void onShow() {
+				toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+				floatMenu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+			}
+		});
+	}
+
 	private void signOut() {
-		new MaterialDialog.Builder(this)
-				.title("Log-Out")
-				.content("Are you sure you wanna Logout?")
-				.positiveText("Yes")
-				.negativeText("Cancel")
-				.onPositive((dialog, which) -> signMeOut())
-				.show();
+		dialogHelper.showConfirmationDialog(
+				positive -> signMeOut(),
+				"Log-Out",
+				"Are you sure you wanna Logout?",
+				"Yes", "Cancel"
+		);
 	}
 
 	private void signMeOut(){
