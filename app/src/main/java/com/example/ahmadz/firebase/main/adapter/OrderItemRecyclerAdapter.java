@@ -1,17 +1,17 @@
 package com.example.ahmadz.firebase.main.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.example.ahmadz.firebase.R;
+import com.example.ahmadz.firebase.main.QuantityView;
 import com.example.ahmadz.firebase.main.callback.OrderItemChangedListener;
 import com.example.ahmadz.firebase.main.model.OrderItemMetaInfo;
 import com.example.ahmadz.firebase.main.model.OrderItemViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
-
-import me.himanshusoni.quantityview.QuantityView;
 
 /**
  * Created by ahmadz on 7/22/16.
@@ -28,6 +28,12 @@ public class OrderItemRecyclerAdapter extends FirebaseRecyclerAdapter<OrderItemM
 	}
 
 	@Override
+	public void onBindViewHolder(OrderItemViewHolder viewHolder, int position) {
+		super.onBindViewHolder(viewHolder, position);
+		viewHolder.setAllTags(position);
+	}
+
+	@Override
 	protected void populateViewHolder(OrderItemViewHolder viewHolder, OrderItemMetaInfo metaInfo, int position) {
 		Animation animation = AnimationUtils.loadAnimation(mContext,
 				(position > lastPosition) ? R.anim.up_from_bottom
@@ -35,19 +41,17 @@ public class OrderItemRecyclerAdapter extends FirebaseRecyclerAdapter<OrderItemM
 		viewHolder.itemView.startAnimation(animation);
 		lastPosition = position;
 
-
 		viewHolder.setAllTags(position);
 		viewHolder.bindViews(metaInfo);
 		viewHolder.quantityView.setOnQuantityChangeListener(new QuantityView.OnQuantityChangeListener() {
 			@Override
-			public void onQuantityChanged(int newQuantity, boolean programmatically) {
+			public void onQuantityChanged(View view, int newQuantity, boolean programmatically) {
+				int tag = (int)view.getTag();
 				if (!programmatically)
-					listener.onQuantityChanged(position, newQuantity);
+					listener.onQuantityChanged(tag, newQuantity);
 			}
 			@Override
-			public void onLimitReached() {
-
-			}
+			public void onLimitReached() {}
 		});
 	}
 

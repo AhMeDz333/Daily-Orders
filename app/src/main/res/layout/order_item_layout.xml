@@ -9,12 +9,11 @@
     android:padding="10dp">
 
 
-    <me.himanshusoni.quantityview.QuantityView
+    <com.example.ahmadz.firebase.main.QuantityView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/quantityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:qv_minQuantity="0"
         app:qv_quantity="1"
         app:qv_quantityTextColor="@android:color/holo_orange_dark"
         app:qv_addButtonTextColor="@android:color/holo_green_light"

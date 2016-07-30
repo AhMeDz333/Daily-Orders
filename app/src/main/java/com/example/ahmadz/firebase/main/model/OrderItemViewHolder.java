@@ -5,10 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.ahmadz.firebase.R;
+import com.example.ahmadz.firebase.main.QuantityView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.himanshusoni.quantityview.QuantityView;
 
 /**
  * Created by ahmadz on 7/22/16.

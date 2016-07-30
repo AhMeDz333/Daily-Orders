@@ -203,7 +203,12 @@ public class MainActivity extends AppCompatActivity implements OrderItemChangedL
 	@Override
 	public void onQuantityChanged(int position, int quantity) {
 		if (quantity == 0){
-			mAdapter.getRef(position).removeValue();
+			progressBar.setVisibility(View.VISIBLE);
+			mAdapter.getRef(position).removeValue().
+					addOnCompleteListener(task -> {
+						mAdapter.notifyDataSetChanged();
+						progressBar.setVisibility(View.INVISIBLE);
+					});
 			return;
 		}
 		Map<String, Object> map = new HashMap<>();
