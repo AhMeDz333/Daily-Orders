@@ -52,7 +52,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textStyle="bold"
                     android:padding="10dp"
-                    android:textColor="#14b953"
+                    android:textColor="@color/colorPrimary"
                     android:shadowColor="#4f4646"/>
             </android.support.v7.widget.CardView>
 
@@ -90,7 +90,7 @@
                     android:layout_height="match_parent"
                     android:id="@+id/float_menu"
                     fab:menu_fab_size="normal"
-                    fab:menu_colorNormal="@color/colorPrimaryDark"
+                    fab:menu_colorNormal="@color/colorPrimary"
                     fab:menu_colorPressed="@color/colorAccent"
                     fab:menu_colorRipple="@color/colorPrimary"
                     fab:menu_icon="@android:drawable/ic_dialog_dialer"
